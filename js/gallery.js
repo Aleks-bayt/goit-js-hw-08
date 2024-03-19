@@ -85,7 +85,7 @@ const images = [
       .join("");
 
     }
-    console.log(images[0].original);
+    
 
     function handleProductClick(event) {
         event.preventDefault();
