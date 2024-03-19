@@ -73,7 +73,7 @@ const images = [
     function creatMarkup(arr) {
         return arr
         .map((images) => `<li class="item gallery-item">
-        <a class="gallery-link" href="${images.description}">
+        <a class="gallery-link" href="${images.original}">
           <img
             class="gallery-image"
             src="${images.preview}"
@@ -85,7 +85,7 @@ const images = [
       .join("");
 
     }
-
+    console.log(images[0].original);
 
     function handleProductClick(event) {
         event.preventDefault();
@@ -96,7 +96,7 @@ const images = [
         const img = event.target;
         const instance = basicLightbox.create(`
         <div class="modal">
-        <img src="${img.dataset.source}" alt="${img.alt}">
+        <img src="${img.dataset.source}" alt="${img.alt}" class="modal-img">
         </div>
         `);
 
