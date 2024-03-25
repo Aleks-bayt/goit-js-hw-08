@@ -21,7 +21,7 @@ const images = [
     description: 'Aerial Beach View',
   },
   {
-    preview:
+    review:
       'https://cdn.pixabay.com/photo/2016/11/18/16/19/flowers-1835619__340.jpg',
     original:
       'https://cdn.pixabay.com/photo/2016/11/18/16/19/flowers-1835619_1280.jpg',
@@ -64,15 +64,16 @@ const images = [
   },
 ];
 
-const container = document.querySelector(".gallery");
+const container = document.querySelector('.gallery');
 
-    container.insertAdjacentHTML("beforeend", creatMarkup(images));
+container.insertAdjacentHTML('beforeend', creatMarkup(images));
 
-    container.addEventListener("click", handleProductClick);
+container.addEventListener('click', handleProductClick);
 
-    function creatMarkup(arr) {
-        return arr
-        .map((images) => `<li class="item gallery-item">
+function creatMarkup(arr) {
+  return arr
+    .map(
+      images => `<li class="item gallery-item">
         <a class="gallery-link" href="${images.original}">
           <img
             class="gallery-image"
@@ -81,38 +82,58 @@ const container = document.querySelector(".gallery");
             alt="${images.description}"
           />
         </a>
-      </li>`)
-      .join("");
+      </li>`
+    )
+    .join('');
+}
 
-    }
-    
+function handleProductClick(event) {
+  event.preventDefault();
+  if (event.target === event.currentTarget) {
+    return;
+  }
 
-    function handleProductClick(event) {
-        event.preventDefault();
-        if (event.target === event.currentTarget) {
-            return;
-        }
-
-        const img = event.target;
-        const instance = basicLightbox.create(`
+  const img = event.target;
+  const instance = basicLightbox.create(
+    `
         <div class="modal">
         <img src="${img.dataset.source}" alt="${img.alt}" class="modal-img">
         </div>
         `,
-        {
-          onShow: instance => {
-            document.addEventListener('keydown', escKeyPressHandler);
-          },
-          onClose: instance => {
-            document.removeEventListener('keydown', escKeyPressHandler);
-          },
-        });
+    {
+            onShow: instance => {
+        // Додаємо обробник кліку на зображення
+        instance
+          .element()
+          .querySelector('.modal-img')
+          .addEventListener('click', modalClickHandler);
+        // Додаємо обробник клавіші Escape
+        window.addEventListener('keydown', escKeyPressHandler);
+      },
+      // Обробник перед закриттям модального вікна
+      onClose: instance => {
+        // Видаляємо обробник кліку на зображення
+        instance
+          .element()
+          .querySelector('.modal-img')
+          .removeEventListener('click', modalClickHandler);
+        // Видаляємо обробник клавіші Escape
+        window.removeEventListener('keydown', escKeyPressHandler);
+      },
+    }
+  );
 
-        instance.show();
-        function escKeyPressHandler(event) {
-          if (event.code === 'Escape') {
+  instance.show();
+  function modalClickHandler(event) {
+            // Закриваємо модальне вікно
             instance.close();
-          }
         }
 
-    }
+        // Функція обробки натискання клавіші Escape
+        function escKeyPressHandler(event) {
+            if (event.code === 'Escape') {
+                // Закриваємо модальне вікно
+                instance.close();
+            }
+        }
+}
