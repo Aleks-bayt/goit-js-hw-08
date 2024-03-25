@@ -101,11 +101,15 @@ function handleProductClick(event) {
         </div>
         `,
     {
-            onShow: instance => {
+      onShow: instance => {
         // Додаємо обробник кліку на зображення
         instance
           .element()
           .querySelector('.modal-img')
+          .addEventListener('click', modalClickHandler);
+        instance
+          .element()
+          .querySelector('.modal')
           .addEventListener('click', modalClickHandler);
         // Додаємо обробник клавіші Escape
         window.addEventListener('keydown', escKeyPressHandler);
@@ -117,6 +121,10 @@ function handleProductClick(event) {
           .element()
           .querySelector('.modal-img')
           .removeEventListener('click', modalClickHandler);
+        instance
+          .element()
+          .querySelector('.modal')
+          .removeEventListener('click', modalClickHandler);
         // Видаляємо обробник клавіші Escape
         window.removeEventListener('keydown', escKeyPressHandler);
       },
@@ -125,15 +133,12 @@ function handleProductClick(event) {
 
   instance.show();
   function modalClickHandler(event) {
-            // Закриваємо модальне вікно
-            instance.close();
-        }
+    instance.close();
+  }
 
-        // Функція обробки натискання клавіші Escape
-        function escKeyPressHandler(event) {
-            if (event.code === 'Escape') {
-                // Закриваємо модальне вікно
-                instance.close();
-            }
-        }
+  function escKeyPressHandler(event) {
+    if (event.code === 'Escape') {
+      instance.close();
+    }
+  }
 }
